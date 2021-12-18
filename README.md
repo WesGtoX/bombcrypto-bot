@@ -1,13 +1,13 @@
 # New captcha update:
 
-### Ta oficialmente terminado, ainda quero melhorar umas coisinhas, tipo os movimentos pra revelar o numero, mas ele ta funcional! E com bastante aleatoriedade, do jeitinho q vcs gostam! 😄
-### The first functional version is ready!
+### Ta oficialmente terminado!
+### It is done!
   
 
 ## Faz a boa pra nois
 ## Do the good
 
-### Smart Chain Wallet:
+### Smart Chain Wallet(BUSD/BNB/BCOIN):
 #### 0xbd06182D8360FB7AC1B05e871e56c76372510dDf
 
 ### PIX:
@@ -35,6 +35,8 @@ alguma forma.
 ### Paypal:
 [Donate:](https://www.paypal.com/donate?hosted_button_id=JVYSC6ZYCNQQQ)
 https://www.paypal.com/donate?hosted_button_id=JVYSC6ZYCNQQQ
+or
+mpcabete@protonmail.com
 
 ## Aviso:
 
@@ -76,7 +78,7 @@ pip install -r requirements.txt
 ### Pronto! Agora é só iniciar o bot com o comando
 
 ```
-python index.py
+python3 index.py
 ```
 
 ![run](https://github.com/mpcabete/bombcrypto-bot/raw/main/readme-images/run.png)
@@ -93,7 +95,7 @@ Abra o terminal, se ainda não tiver navegado para a pasta do bot dê novamente 
 Para iniciar use o comando 
 
 ```
-python index.py
+python3 index.py
 ```
 
 Assim que ele iniciar ele vai começar mandando os bonecos trabalhar. Para que ele funcione é preciso que a janela do game esteja aparecendo na sua tela.
