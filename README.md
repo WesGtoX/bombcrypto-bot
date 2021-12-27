@@ -1,14 +1,5 @@
-## Faz a boa pra nois
-## Do the good
+Bot para Bombcrypto baseado em https://github.com/mpcabete/bombcrypto-bot mas com suporte a multiaccount.
 
-### Smart Chain Wallet(BUSD/BNB/BCOIN):
-#### 0xbd06182D8360FB7AC1B05e871e56c76372510dDf
-
-### PIX:
-  6ce2b79e-97be-4881-a882-81902e29d7ce
-![pix](https://github.com/mpcabete/bombcrypto-bot/raw/main/readme-images/pix.jpeg)
-
-  
 # Sobre:
 Este bot tem o seu código aberto, de forma que qualquer pessoa pode vê-lo, fazer uma fork, ou updates.
 
