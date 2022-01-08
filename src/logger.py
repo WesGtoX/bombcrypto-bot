@@ -57,8 +57,9 @@ def logger(message, progress_indicator = False, color = 'default'):
 
     return True
 
-def loggerMapClicked():
-  logger('🗺️ New Map button clicked!')
+
+def logger_map_clicked():
+    logger('🗺️ New Map button clicked!')
   logger_file = open("./logs/new-map.log", "a", encoding='utf-8')
   logger_file.write(dateFormatted() + '\n')
   logger_file.close()
