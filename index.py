@@ -1,9 +1,11 @@
 import os
 import sys
 import time
+import datetime
 
 import mss
 import yaml
+import discord
 
 import numpy as np
 
@@ -129,6 +131,33 @@ def load_heroes_to_send_home():
     print('>>---> %d heroes that should be sent home loaded' % len(heroes))
 
     return heroes
+
+
+def send_stash_to_discord(window_name=''):
+    if click_btn(images['stash']):
+        time.sleep(2)
+
+        file_date = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        file_name = f'{window_name}_{file_date}.png' if window_name != '' else f'{file_date}.png'
+
+        image_file = os.path.join('screenshots', file_name)
+        pic = pyautogui.screenshot(image_file)
+
+        time.sleep(1)
+
+        webhook = discord.Webhook.from_url(os.getenv('DISCORD_WEBHOOK'), adapter=discord.RequestsWebhookAdapter())
+        webhook.send(file=discord.File(image_file))
+
+        click_btn(images['x'])
+
+
+def save_daily_profit(window_name):
+    now_time = datetime.datetime.now().time()
+    start_time = datetime.time(2)
+    end_time = datetime.time(3)
+
+    if start_time <= now_time <= end_time:
+        send_stash_to_discord(window_name=window_name)
 
 
 def show(rectangles, img=None):
@@ -380,6 +409,8 @@ def go_to_game():
     click_btn(images['x'])
     click_btn(images['treasure-hunt-icon'])
 
+    send_stash_to_discord()
+
 
 def refreshHeroesPositions():
     logger('🔃 Refreshing Heroes Positions')
@@ -585,6 +616,10 @@ def main():
             logger(f'{"=" * 36}', progress_indicator=False)
 
             time.sleep(2)
+
+
+            if datetime.time(2) <= datetime.datetime.now().time() <= datetime.time(3):
+                save_daily_profit(window_name=last.get('window_name'))
 
             if now - last['heroes'] > add_randomness(t['send_heroes_for_work'] * 60):
                 last['heroes'] = now
