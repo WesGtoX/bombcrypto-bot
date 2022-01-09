@@ -59,9 +59,9 @@ def logger(message, progress_indicator=False, color='default', line_break=''):
     return True
 
 
-def logger_map_clicked():
+def logger_map_clicked(window_name=''):
     logger('🗺️ New Map button clicked!')
 
     logger_file = open('./logs/new-map.log', 'a', encoding='utf-8')
-    logger_file.write('{date_formatted()}\n')
+    logger_file.write(f'[{date_formatted()}] => {window_name}\n')
     logger_file.close()

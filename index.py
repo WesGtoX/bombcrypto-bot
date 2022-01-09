@@ -221,6 +221,15 @@ def scroll():
     if len(commoms) == 0:
         return
 
+    # if len(commoms) == 0:
+    #     commoms = positions(images['rare-text'], threshold = ct['rare'])
+    #     if len(commoms) == 0:
+    #         commoms = positions(images['super_rare-text'], threshold = ct['super_rare'])
+    #         if len(commoms) == 0:
+    #             commoms = positions(images['epic-text'], threshold = ct['epic'])
+    #             if len(commoms) == 0:
+    #                 return
+
     x, y, w, h = commoms[len(commoms) - 1]
 
     move_to_with_randomness(x, y, 1)
@@ -590,7 +599,7 @@ def main():
                 last['new_map'] = now
 
                 if click_btn(images['new-map']):
-                    logger_map_clicked()
+                    logger_map_clicked(f'{last.get("window_name").upper()}')
 
             if now - last["refresh_heroes"] > add_randomness(t['refresh_heroes_positions'] * 60):
                 last["refresh_heroes"] = now
