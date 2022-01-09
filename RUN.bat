@@ -1,0 +1,6 @@
+@echo off
+@echo Install dependencies with poetry...
+poetry install|more
+@echo Starting BOT execution...
+@echo.
+poetry run python main.py

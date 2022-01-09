@@ -331,7 +331,7 @@ pip-selfcheck.json
 ### Logs ###
 /logs/new-map.log
 /logs/logger.log
-/logs/.log.*
+/logs/*.log.*
 
 # Support for Project snippet scope
 
