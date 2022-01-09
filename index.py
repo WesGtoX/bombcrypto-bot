@@ -161,6 +161,7 @@ def save_daily_profit(window_name):
     end_time = datetime.time(3)
 
     if start_time <= now_time <= end_time:
+        logger(f'📷 save the daily profit')
         send_stash_to_discord(window_name=window_name)
         return True
 
@@ -417,7 +418,7 @@ def go_to_game():
     click_btn(images['treasure-hunt-icon'])
 
 
-def refreshHeroesPositions():
+def refresh_heroes_positions():
     logger('🔃 Refreshing Heroes Positions')
 
     click_btn(images['go-back-arrow'])
@@ -527,7 +528,7 @@ def send_heroes_home():
             print('hero already home, or home full(no dark home button)')
 
 
-def refreshHeroes():
+def refresh_heroes():
     logger('🏢 Search for heroes to work')
 
     go_to_heroes()
@@ -631,7 +632,7 @@ def main():
 
             if now - last['heroes'] > add_randomness(t['send_heroes_for_work'] * 60):
                 last['heroes'] = now
-                refreshHeroes()
+                refresh_heroes()
 
             if now - last['login'] > add_randomness(t['check_for_login'] * 60):
                 sys.stdout.flush()
@@ -646,10 +647,10 @@ def main():
 
             if now - last['refresh_heroes'] > add_randomness(t['refresh_heroes_positions'] * 60):
                 last['refresh_heroes'] = now
-                refreshHeroesPositions()
+                refresh_heroes_positions()
 
             if now - last['screenshot_profit'] > add_randomness(t['send_screenshot_taken'] * 60):
-                last['heroes'] = now
+                last['screenshot_profit'] = now
                 send_stash_to_discord(window_name=last.get('window_name'))
 
             # click_btn(teasureHunt)
