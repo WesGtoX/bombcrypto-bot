@@ -416,8 +416,6 @@ def go_to_game():
     click_btn(images['x'])
     click_btn(images['treasure-hunt-icon'])
 
-    send_stash_to_discord()
-
 
 def refreshHeroesPositions():
     logger('🔃 Refreshing Heroes Positions')
