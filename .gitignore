@@ -327,11 +327,16 @@ pip-selfcheck.json
 .history
 .ionide
 
-
 ### Logs ###
 /logs/new-map.log
 /logs/logger.log
 /logs/*.log.*
+
+### Screenshots ###
+screenshots/*.png
+screenshots/*.jpg
+screenshots/*.jpeg
+*.db
 
 # Support for Project snippet scope
 

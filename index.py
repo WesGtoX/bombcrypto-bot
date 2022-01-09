@@ -12,8 +12,9 @@ import numpy as np
 import pyautogui
 import pygetwindow
 
-from cv2 import cv2
 from random import random, randint
+from decouple import config
+from cv2 import cv2
 
 from src.logger import logger, logger_map_clicked
 
@@ -135,18 +136,21 @@ def load_heroes_to_send_home():
 
 def send_stash_to_discord(window_name=''):
     if click_btn(images['stash']):
+        logger(f'📷 preparing to take and send screenshot of profit')
         time.sleep(2)
 
         file_date = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         file_name = f'{window_name}_{file_date}.png' if window_name != '' else f'{file_date}.png'
 
         image_file = os.path.join('screenshots', file_name)
-        pic = pyautogui.screenshot(image_file)
+        pyautogui.screenshot(image_file)
 
         time.sleep(1)
 
-        webhook = discord.Webhook.from_url(os.getenv('DISCORD_WEBHOOK'), adapter=discord.RequestsWebhookAdapter())
+        webhook = discord.Webhook.from_url(config('DISCORD_WEBHOOK'), adapter=discord.RequestsWebhookAdapter())
         webhook.send(file=discord.File(image_file))
+
+        logger(f'📸 screenshot taken and sent to discord')
 
         click_btn(images['x'])
 
@@ -158,6 +162,9 @@ def save_daily_profit(window_name):
 
     if start_time <= now_time <= end_time:
         send_stash_to_discord(window_name=window_name)
+        return True
+
+    return False
 
 
 def show(rectangles, img=None):
@@ -219,7 +226,7 @@ def print_sreen():
         sct_img = np.array(sct.grab(monitor))
 
         # The screen part to capture
-        # monitor = {"top": 160, "left": 160, "width": 1000, "height": 135}
+        # monitor = {'top': 160, 'left': 160, 'width': 1000, 'height': 135}
 
         # Grab the data
         return sct_img[:, :, :3]
@@ -527,9 +534,9 @@ def refreshHeroes():
 
     go_to_heroes()
 
-    if c['select_heroes_mode'] == "full":
+    if c['select_heroes_mode'] == 'full':
         logger('⚒️ Sending heroes with full stamina bar to work', 'green')
-    elif c['select_heroes_mode'] == "green":
+    elif c['select_heroes_mode'] == 'green':
         logger('⚒️ Sending heroes with green stamina bar to work', 'green')
     else:
         logger('⚒️ Sending all heroes to work', 'green')
@@ -602,6 +609,7 @@ def main():
             'heroes': 0,
             'new_map': 0,
             'refresh_heroes': 0,
+            'screenshot_profit': 0,
             'window_name': f'Bombcrypto_00{windows_id}'
         })
 
@@ -617,9 +625,11 @@ def main():
 
             time.sleep(2)
 
+            if not last.get('save_daily_profit') or last.get('save_daily_profit') != datetime.date.today():
+                is_save_daily_profit = save_daily_profit(window_name=last.get('window_name'))
 
-            if datetime.time(2) <= datetime.datetime.now().time() <= datetime.time(3):
-                save_daily_profit(window_name=last.get('window_name'))
+                if is_save_daily_profit:
+                    last['save_daily_profit'] = datetime.date.today()
 
             if now - last['heroes'] > add_randomness(t['send_heroes_for_work'] * 60):
                 last['heroes'] = now
@@ -636,9 +646,13 @@ def main():
                 if click_btn(images['new-map']):
                     logger_map_clicked(f'{last.get("window_name").upper()}')
 
-            if now - last["refresh_heroes"] > add_randomness(t['refresh_heroes_positions'] * 60):
-                last["refresh_heroes"] = now
+            if now - last['refresh_heroes'] > add_randomness(t['refresh_heroes_positions'] * 60):
+                last['refresh_heroes'] = now
                 refreshHeroesPositions()
+
+            if now - last['screenshot_profit'] > add_randomness(t['send_screenshot_taken'] * 60):
+                last['heroes'] = now
+                send_stash_to_discord(window_name=last.get('window_name'))
 
             # click_btn(teasureHunt)
 

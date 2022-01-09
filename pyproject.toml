@@ -19,6 +19,9 @@ PyScreeze = "^0.1.28"
 pytweening = "^1.0.4"
 PyYAML = "^6.0"
 discord = "^1.7.3"
+Pillow = "^9.0.0"
+requests = "^2.27.1"
+python-decouple = "^3.5"
 
 [tool.poetry.dev-dependencies]
 
