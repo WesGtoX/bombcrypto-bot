@@ -137,7 +137,7 @@ def load_heroes_to_send_home():
 def send_stash_to_discord(window_name=''):
     if click_btn(images['stash']):
         logger(f'📷 preparing to take and send screenshot of profit')
-        time.sleep(2)
+        time.sleep(10)
 
         file_date = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         file_name = f'{window_name}_{file_date}.png' if window_name != '' else f'{file_date}.png'
