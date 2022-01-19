@@ -134,25 +134,36 @@ def load_heroes_to_send_home():
     return heroes
 
 
+def send_to_discord(window_name='', screen=''):
+    file_date = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    file_name = f'{window_name}_{screen}_{file_date}.png' if window_name != '' else f'{file_date}.png'
+
+    image_file = os.path.join('screenshots', file_name)
+    pyautogui.screenshot(image_file)
+
+    time.sleep(1)
+
+    webhook = discord.Webhook.from_url(config('DISCORD_WEBHOOK'), adapter=discord.RequestsWebhookAdapter())
+    webhook.send(file=discord.File(image_file))
+
+    logger(f'📸 screenshot taken and sent to discord')
+
+
 def send_stash_to_discord(window_name=''):
     if click_btn(images['stash']):
         logger(f'📷 preparing to take and send screenshot of profit')
         time.sleep(10)
 
-        file_date = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        file_name = f'{window_name}_{file_date}.png' if window_name != '' else f'{file_date}.png'
-
-        image_file = os.path.join('screenshots', file_name)
-        pyautogui.screenshot(image_file)
-
-        time.sleep(1)
-
-        webhook = discord.Webhook.from_url(config('DISCORD_WEBHOOK'), adapter=discord.RequestsWebhookAdapter())
-        webhook.send(file=discord.File(image_file))
-
-        logger(f'📸 screenshot taken and sent to discord')
+        send_to_discord(window_name=window_name, screen='Profit')
 
         click_btn(images['x'])
+
+
+def send_map_status_to_discord(window_name=''):
+        logger(f'📷 preparing to take and send screenshot of map status')
+        time.sleep(10)
+
+        send_to_discord(window_name=window_name, screen='Map')
 
 
 def save_daily_profit(window_name):
@@ -652,6 +663,10 @@ def main():
             if now - last['screenshot_profit'] > add_randomness(t['send_screenshot_taken'] * 60):
                 last['screenshot_profit'] = now
                 send_stash_to_discord(window_name=last.get('window_name'))
+                
+                time.sleep(2)
+                
+                send_map_status_to_discord(window_name=last.get('window_name'))
 
             # click_btn(teasureHunt)
 

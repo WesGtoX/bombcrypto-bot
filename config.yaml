@@ -171,7 +171,7 @@
   #
   # [pt_BR]
   # Valor padrão: 7
-  qtd_heroes_to_work: 5
+  qtd_heroes_to_work: 7
 
   # [en_US] Option for save logs to a file (logs.txt)
   # Default value: False
