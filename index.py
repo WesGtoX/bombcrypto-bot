@@ -25,6 +25,7 @@ stream = open('config.yaml', 'r')
 c = yaml.safe_load(stream)
 ct = c['threshold']
 ch = c['home']
+gp = c['game_page']
 
 pause = c['time_intervals']['interval_between_moviments']
 pyautogui.PAUSE = pause
@@ -438,6 +439,58 @@ def refresh_heroes_positions():
     click_btn(images['treasure-hunt-icon'])
 
 
+def refresh_page():
+    logger('🔃 Refresh page to fix indestructible block')
+
+    pyautogui.hotkey('ctrl', 'f5')
+
+    time.sleep(5)
+
+    if click_btn(images['connect-wallet'], timeout=10):
+        logger('🎉 Connect wallet button detected, logging in!')
+
+    if click_btn(images['select-wallet-2'], timeout=8):
+        # sometimes the sign popup appears imediately
+        # print('Sign button clicked')
+        # print(f'{login_attempts} login attempt')
+        pass
+
+        if click_btn(images['treasure-hunt-icon'], timeout=15):
+            # print('sucessfully login, treasure hunt btn clicked')
+            pass
+
+        return  # click ok button
+
+    if not click_btn(images['select-wallet-1-no-hover'], ):
+        if click_btn(images['select-wallet-1-hover'], threshold=ct['select_wallet_buttons']):
+            # ideally, he would alternate between checking each of the 2 for a while.
+            # print('sleep in case there is no metamask text removed')
+            # time.sleep(20)
+            pass
+    else:
+        # print('sleep in case there is no metamask text removed')
+        # time.sleep(20)
+        pass
+
+    if click_btn(images['select-wallet-2'], timeout=20):
+        pass
+        # print('sign button clicked')
+        # print(f'{login_attempts} login attempt')
+
+        # time.sleep(25)
+
+        if click_btn(images['treasure-hunt-icon'], timeout=25):
+            pass
+            # print('sucessfully login, treasure hunt btn clicked')
+
+        # time.sleep(15)
+
+    if click_btn(images['ok'], timeout=5):
+        # time.sleep(15)
+        # print('ok button clicked')
+        pass
+
+
 def login():
     global login_attempts
     logger('😿 Checking if game has disconnected')
@@ -470,10 +523,10 @@ def login():
 
     if not click_btn(images['select-wallet-1-no-hover'], ):
         if click_btn(images['select-wallet-1-hover'], threshold=ct['select_wallet_buttons']):
-            pass
             # ideally, he would alternate between checking each of the 2 for a while.
             # print('sleep in case there is no metamask text removed')
             # time.sleep(20)
+            pass
     else:
         # print('sleep in case there is no metamask text removed')
         # time.sleep(20)
@@ -618,6 +671,7 @@ def main():
             'login': 0,
             'heroes': 0,
             'new_map': 0,
+            'refresh_page': 0,
             'refresh_heroes': 0,
             'screenshot_profit': 0,
             'window_name': f'Bombcrypto_00{windows_id}'
@@ -634,6 +688,13 @@ def main():
             logger(f'{"=" * 36}', progress_indicator=False)
 
             time.sleep(2)
+
+            if gp['enable']:
+                last['refresh_page'] = now
+
+                if now - last['refresh_page'] > add_randomness(t['refresh_game_page'] * 60):
+                    last['refresh_page'] = now
+                    refresh_page()
 
             if not last.get('save_daily_profit') or last.get('save_daily_profit') != datetime.date.today():
                 is_save_daily_profit = save_daily_profit(window_name=last.get('window_name'))

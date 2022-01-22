@@ -11,7 +11,14 @@
     # [pt_BR] Intervalo de tempo para verificar se há heróis disponíveis para trabalhar
     # Valor padrão (em minutos): 10
     send_heroes_for_work: 15
-    
+
+    # [en_US] Time interval to refresh page,
+    # Default value (in minutes): 3
+    #
+    # [pt_BR] Intervalo de tempo para atualizar a página
+    # Valor padrão (em minutos): 120
+    refresh_game_page: 120
+
     # [en_US] Time interval to update heroes position in the map,
     # Default value (in minutes): 3
     #
@@ -122,6 +129,13 @@
     hero_threshold: 0.8
     home_button_threshold: 0.9
 
+  game_page:
+    # [en_US]
+    # Enable page refresh
+    #
+    # [pt_BR]
+    # Ativar atualização de página
+    enable: True
 
   # [en_US]
   # Default value: 60
