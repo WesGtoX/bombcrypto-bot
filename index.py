@@ -665,13 +665,14 @@ def main():
     windows_id = 0
 
     for w in pygetwindow.getWindowsWithTitle('bombcrypto - Google Chrome'):
+        now = time.time()
         windows_id += 1
         windows.append({
             'window': w,
             'login': 0,
             'heroes': 0,
             'new_map': 0,
-            'refresh_page': 0,
+            'refresh_page': now,
             'refresh_heroes': 0,
             'screenshot_profit': 0,
             'window_name': f'Bombcrypto_00{windows_id}'
@@ -690,9 +691,7 @@ def main():
             time.sleep(2)
 
             if gp['enable']:
-                last['refresh_page'] = now
-
-                if now - last['refresh_page'] > add_randomness(t['refresh_game_page'] * 60):
+                if now - last['refresh_page'] > add_randomness(t['refresh_game_page'] * 120):
                     last['refresh_page'] = now
                     refresh_page()
 
