@@ -143,11 +143,14 @@ def send_to_discord(window_name='', screen=''):
     pyautogui.screenshot(image_file)
 
     time.sleep(1)
+    
+    try:
+        webhook = discord.Webhook.from_url(config('DISCORD_WEBHOOK'), adapter=discord.RequestsWebhookAdapter())
+        webhook.send(file=discord.File(image_file))
 
-    webhook = discord.Webhook.from_url(config('DISCORD_WEBHOOK'), adapter=discord.RequestsWebhookAdapter())
-    webhook.send(file=discord.File(image_file))
-
-    logger(f'📸 screenshot taken and sent to discord')
+        logger(f'📸 screenshot taken and sent to discord')
+    except Exception:
+        logger(f'📸❌ there was a communication error with discord')
 
 
 def send_stash_to_discord(window_name=''):
