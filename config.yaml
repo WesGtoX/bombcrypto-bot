@@ -135,7 +135,7 @@
     #
     # [pt_BR]
     # Ativar atualização de página
-    enable: True
+    enable: False
 
   # [en_US]
   # Default value: 60

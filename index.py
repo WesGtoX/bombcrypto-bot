@@ -10,11 +10,16 @@ import discord
 import numpy as np
 
 import pyautogui
-import pygetwindow
+# import pygetwindow
 
 from random import random, randint
 from decouple import config
 from cv2 import cv2
+
+import gi
+
+gi.require_version('Wnck', '3.0')
+from gi.repository import Wnck
 
 from src.logger import logger, logger_map_clicked
 
@@ -637,6 +642,20 @@ def refresh_heroes():
     go_to_game()
 
 
+def getWindowsWithTitleLinux(title):
+    screen = Wnck.Screen.get_default()
+    screen.force_update()  # recommended by documenation
+    window_list = screen.get_windows()
+
+    windowsObjs = []
+
+    for win in window_list:
+        if title in win.get_name():
+            windowsObjs.append(win)
+
+    return windowsObjs
+
+
 def main():
     """
     Main execution setup and loop
@@ -667,7 +686,7 @@ def main():
     windows = []
     windows_id = 0
 
-    for w in pygetwindow.getWindowsWithTitle('bombcrypto - Google Chrome'):
+    for w in getWindowsWithTitleLinux('bombcrypto - Google Chrome'):
         now = time.time()
         windows_id += 1
         windows.append({
@@ -685,7 +704,7 @@ def main():
         now = time.time()
 
         for last in windows:
-            last['window'].activate()
+            last['window'].activate(now)
 
             logger(f'{"=" * 36}', progress_indicator=False, line_break='\n\n')
             logger(f'{"=" * 10} {last.get("window_name").upper()} {"=" * 10}', progress_indicator=False)
