@@ -10,7 +10,7 @@ import discord
 import numpy as np
 
 import pyautogui
-import pygetwindow
+# import pygetwindow
 
 from random import random, randint
 from decouple import config
@@ -664,80 +664,92 @@ def main():
     time.sleep(7)
 
     t = c['time_intervals']
-    windows = []
-    windows_id = 0
+    # windows = []
+    windows_id = 1
 
-    for w in pygetwindow.getWindowsWithTitle('bombcrypto - Google Chrome'):
-        now = time.time()
-        windows_id += 1
-        windows.append({
-            'window': w,
-            'login': 0,
-            'heroes': 0,
-            'new_map': 0,
-            'refresh_page': now,
-            'refresh_heroes': 0,
-            'screenshot_profit': 0,
-            'window_name': f'Bombcrypto_00{windows_id}'
-        })
+    now = time.time()
+
+    last = {
+        'login': 0,
+        'heroes': 0,
+        'new_map': 0,
+        'refresh_page': now,
+        'refresh_heroes': 0,
+        'screenshot_profit': 0,
+        'window_name': f'Bombcrypto_00{windows_id}'
+    }
+
+    # for w in pygetwindow.getWindowsWithTitle('bombcrypto - Google Chrome'):
+    #     now = time.time()
+    #     windows_id += 1
+    #     windows.append({
+    #         'window': w,
+    #         'login': 0,
+    #         'heroes': 0,
+    #         'new_map': 0,
+    #         'refresh_page': now,
+    #         'refresh_heroes': 0,
+    #         'screenshot_profit': 0,
+    #         'window_name': f'Bombcrypto_00{windows_id}'
+    #     })
 
     while True:
         now = time.time()
 
-        for last in windows:
-            last['window'].activate()
+        # for last in windows:
+        # last['window'].activate()
 
-            logger(f'{"=" * 36}', progress_indicator=False, line_break='\n\n')
-            logger(f'{"=" * 10} {last.get("window_name").upper()} {"=" * 10}', progress_indicator=False)
-            logger(f'{"=" * 36}', progress_indicator=False)
+        logger(f'{"=" * 36}', progress_indicator=False, line_break='\n\n')
+        logger(f'{"=" * 10} {last.get("window_name").upper()} {"=" * 10}', progress_indicator=False)
+        logger(f'{"=" * 36}', progress_indicator=False)
+
+        time.sleep(2)
+
+        if gp['enable']:
+            if now - last['refresh_page'] > add_randomness(t['refresh_game_page'] * 120):
+                last['refresh_page'] = now
+                refresh_page()
+
+        if not last.get('save_daily_profit') or last.get('save_daily_profit') != datetime.date.today():
+            is_save_daily_profit = save_daily_profit(window_name=last.get('window_name'))
+
+            if is_save_daily_profit:
+                last['save_daily_profit'] = datetime.date.today()
+
+        if now - last['heroes'] > add_randomness(t['send_heroes_for_work'] * 60):
+            last['heroes'] = now
+            refresh_heroes()
+
+        if now - last['login'] > add_randomness(t['check_for_login'] * 60):
+            sys.stdout.flush()
+            last['login'] = now
+            login()
+
+        if now - last['new_map'] > t['check_for_new_map_button']:
+            last['new_map'] = now
+
+            if click_btn(images['new-map']):
+                logger_map_clicked(f'{last.get("window_name").upper()}')
+
+        if now - last['refresh_heroes'] > add_randomness(t['refresh_heroes_positions'] * 60):
+            last['refresh_heroes'] = now
+            refresh_heroes_positions()
+
+        if now - last['screenshot_profit'] > add_randomness(t['send_screenshot_taken'] * 60):
+            last['screenshot_profit'] = now
+            send_stash_to_discord(window_name=last.get('window_name'))
 
             time.sleep(2)
 
-            if gp['enable']:
-                if now - last['refresh_page'] > add_randomness(t['refresh_game_page'] * 120):
-                    last['refresh_page'] = now
-                    refresh_page()
+            send_map_status_to_discord(window_name=last.get('window_name'))
 
-            if not last.get('save_daily_profit') or last.get('save_daily_profit') != datetime.date.today():
-                is_save_daily_profit = save_daily_profit(window_name=last.get('window_name'))
+        # click_btn(teasureHunt)
 
-                if is_save_daily_profit:
-                    last['save_daily_profit'] = datetime.date.today()
+        logger(None, progress_indicator=True)
 
-            if now - last['heroes'] > add_randomness(t['send_heroes_for_work'] * 60):
-                last['heroes'] = now
-                refresh_heroes()
+        sys.stdout.flush()
 
-            if now - last['login'] > add_randomness(t['check_for_login'] * 60):
-                sys.stdout.flush()
-                last['login'] = now
-                login()
-
-            if now - last['new_map'] > t['check_for_new_map_button']:
-                last['new_map'] = now
-
-                if click_btn(images['new-map']):
-                    logger_map_clicked(f'{last.get("window_name").upper()}')
-
-            if now - last['refresh_heroes'] > add_randomness(t['refresh_heroes_positions'] * 60):
-                last['refresh_heroes'] = now
-                refresh_heroes_positions()
-
-            if now - last['screenshot_profit'] > add_randomness(t['send_screenshot_taken'] * 60):
-                last['screenshot_profit'] = now
-                send_stash_to_discord(window_name=last.get('window_name'))
-                
-                time.sleep(2)
-                
-                send_map_status_to_discord(window_name=last.get('window_name'))
-
-            # click_btn(teasureHunt)
-
-            logger(None, progress_indicator=True)
-
-            sys.stdout.flush()
-
-            time.sleep(30)
+        time.sleep(30)
 
 
 if __name__ == '__main__':
