@@ -204,7 +204,7 @@ def show(rectangles, img=None):
 
 def click_btn(img, timeout=3, threshold=ct['default']):
     """
-    Search for img in the scree, if found moves the cursor over it and clicks.
+    Search for img in the screen, if found moves the cursor over it and clicks.
     Parameters:
         img: The image that will be used as an template to find where to click.
         timeout (int): Time in seconds that it will keep looking for the img before returning with fail
@@ -511,6 +511,11 @@ def login():
         login_attempts = login_attempts + 1
         # TODO high it gives error and low the button doesn't open
         # time.sleep(10)
+
+    if click_btn(images['connect-metamask'], timeout=10):
+        logger('🎉 Login connect button detected, logging in!')
+
+        login_attempts = login_attempts + 1
 
     if click_btn(images['select-wallet-2'], timeout=8):
         # sometimes the sign popup appears imediately
