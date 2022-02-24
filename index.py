@@ -670,7 +670,7 @@ def main():
 
     t = c['time_intervals']
     # windows = []
-    windows_id = 1
+    windows_id = config('WINDOWS_ID', '1')
 
     now = time.time()
 
