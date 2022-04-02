@@ -162,6 +162,18 @@ def send_stash_to_discord(window_name=''):
 
         click_btn(images['x'])
 
+    click_btn(images['go-back-arrow'])
+
+    if click_btn(images['staking']):
+        logger(f'📷 preparing to take and send screenshot of staking profit')
+        time.sleep(10)
+
+        send_to_discord(window_name=window_name, screen='Staking Profit')
+
+        click_btn(images['x'])
+
+    click_btn(images['treasure-hunt-icon'])
+
 
 def send_map_status_to_discord(window_name=''):
         logger(f'📷 preparing to take and send screenshot of map status')
