@@ -353,7 +353,7 @@ def is_working(bar, buttons):
 
 def click_green_bar_buttons(qtd_of_hero):
     # click on the q so trabaiano but i think it doesn't matter
-    offset = 140
+    offset = 170
 
     green_bars = positions(images['green-bar'], threshold=ct['green_bar'])
     logger(f'🟩 {len(green_bars)} green bars detected')
